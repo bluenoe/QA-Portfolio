@@ -1,0 +1,154 @@
+{
+  "info": {
+    "_postman_id": "c1f7a228-4e89-4d62-9e99-8d7b00a12e34",
+    "name": "Shopping Cart API - BluShop",
+    "description": "Postman Collection for testing Shopping Cart endpoints in blushop-laravel.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1) Add to Cart",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Test script to verify HTTP 200 OK status code",
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// Test script to verify successful cart additions in JSON response",
+              "pm.test(\"Response indicates success and returns cart count\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.eql(true);",
+              "    pm.expect(jsonData).to.have.property('cart_count');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"quantity\": 2,\n  \"size\": \"M\",\n  \"color\": \"Black\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/cart/add/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cart",
+            "add",
+            "1"
+          ]
+        },
+        "description": "Adds a product variant to the session cart. Expects Product ID as URL parameter."
+      },
+      "response": []
+    },
+    {
+      "name": "2) View Cart",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/html,application/xhtml+xml,application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/cart",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cart"
+          ]
+        },
+        "description": "Renders the cart index view or returns cart items in session."
+      },
+      "response": []
+    },
+    {
+      "name": "3) Update Quantity",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rowId\": \"1_M_Black\",\n  \"quantity\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/cart/update",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cart",
+            "update"
+          ]
+        },
+        "description": "Updates item quantity in cart using the composite rowId (Product_Size_Color)."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    }
+  ]
+}
